@@ -25,10 +25,11 @@ ioHook.start();
 // Key constants
 const CTRL = 29;
 const ALT = 56;
+const TAB = 15;
 const F7 = 65;
 
 // Registers shortcut
-ioHook.registerShortcut([CTRL, F7], (keys) => {
+ioHook.registerShortcut([ALT, TAB], (keys) => {
   console.log('Shortcut pressed with keys:', keys);
 });
 
