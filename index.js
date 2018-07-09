@@ -14,6 +14,7 @@ const DESKTOP_SHORTCUT = 'DESKTOP_SHORTCUT'
 const EXECUTION_TIMEOUT = 500
 const CTRL = 29;
 const ALT = 56;
+const TAB = 15;
 const F7 = 65;
 
 // Astrokey Workflow
@@ -31,14 +32,16 @@ const myWorkflows = [{
     // { id: 3, order: 3, type: 'KEY_UP', label: 'Release Key' },
     { id: 5, order: 5, icon: 'fa-paragraph', type: 'TEXT', label: 'Type', value: 'I love Alaina' },
     { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
-    { id: 4, order: 4, icon: 'fa-clock-o', type: 'DELAY', label: 'Delay', value: 2000 },
-    { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
-    { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
+    // { id: 4, order: 4, icon: 'fa-clock-o', type: 'DELAY', label: 'Delay', value: 2000 },
+    // { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
+    // { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
+    { id: 7, order: 7, icon: 'fa-code', type: 'KEY_UP', label: 'Keyup' },
     { id: 5, order: 5, icon: 'fa-paragraph', type: 'TEXT', label: 'Type', value: 'SO MUCHHHHH' }
   ],
   triggers: [{
     type: DESKTOP_SHORTCUT,
-    shortcut: [CTRL, F7]
+    // shortcut: [CTRL, F7]
+    shortcut: [F7]
   }]
 }]
 
@@ -58,6 +61,19 @@ function keyTap (key) {
     robot.keyTap(key)
     return resolve()
   })
+}
+
+function keyUp (shortcut) {
+  console.log('KEY UP KEY UP')
+  return new Promise((resolve, reject) => {
+    // console.log('finish keytap.')
+    ioHook.registerShortcut(shortcut, (keys) => {
+      console.log('Shortcut KEY UP WOW pressed with keys:', keys);
+      // return resolve()
+      // console.log('EXECUTING WORKFLOW')
+    });
+  })
+  // Registers shortcut
 }
 
 function delay (timeout) {
@@ -92,6 +108,8 @@ _.each(myWorkflows, (workflow) => {
               return delay(step.value)
             } else if (step.type === 'KEY') {
               return keyTap(step.value)
+            } else if (step.type === 'KEY_UP') {
+              return keyUp(trigger.shortcut)
             }
           }).then(() => {
             // console.log('WORKFLOW COMPLETE')
