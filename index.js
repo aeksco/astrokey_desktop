@@ -5,6 +5,9 @@ const robot = require('robotjs');
 const _ = require('lodash');
 const Promise = require('bluebird');
 
+let CURRENTLY_EXECUTING = false;
+let IS_KEY_UP = true;
+
 // start ioHook
 ioHook.start();
 // ioHook.setDebug(true); // Uncomment this line for see all debug information from iohook
@@ -30,13 +33,13 @@ const myWorkflows = [{
   steps: [
     // { id: 2, order: 2, icon: 'fa-play-circle-o', type: 'MACRO', label: 'Run Macro', value: [] },
     // { id: 3, order: 3, type: 'KEY_UP', label: 'Release Key' },
-    { id: 5, order: 5, icon: 'fa-paragraph', type: 'TEXT', label: 'Type', value: 'I love Alaina' },
+    { id: 5, order: 5, icon: 'fa-paragraph', type: 'TEXT', label: 'Type', value: 'Hello, Astrokey' },
     { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
+    // { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
     // { id: 4, order: 4, icon: 'fa-clock-o', type: 'DELAY', label: 'Delay', value: 2000 },
-    // { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
-    // { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
     { id: 7, order: 7, icon: 'fa-code', type: 'KEY_UP', label: 'Keyup' },
-    { id: 5, order: 5, icon: 'fa-paragraph', type: 'TEXT', label: 'Type', value: 'SO MUCHHHHH' }
+    { id: 6, order: 6, icon: 'fa-cube', type: 'KEY', value: 'enter' },
+    { id: 5, order: 5, icon: 'fa-paragraph', type: 'TEXT', label: 'Type', value: 'Woooo' }
   ],
   triggers: [{
     type: DESKTOP_SHORTCUT,
@@ -64,14 +67,21 @@ function keyTap (key) {
 }
 
 function keyUp (shortcut) {
-  console.log('KEY UP KEY UP')
   return new Promise((resolve, reject) => {
     // console.log('finish keytap.')
-    ioHook.registerShortcut(shortcut, (keys) => {
-      console.log('Shortcut KEY UP WOW pressed with keys:', keys);
-      // return resolve()
-      // console.log('EXECUTING WORKFLOW')
-    });
+    // ioHook.registerShortcut(shortcut, (keys) => {
+    //   console.log('Shortcut KEY UP WOW pressed with keys:', keys);
+    //   // return resolve()
+    //   // console.log('EXECUTING WORKFLOW')
+    // });
+    let interval;
+    interval = setInterval(() => {
+      // console.log('CHECKING INTERVAL')
+      if (IS_KEY_UP) {
+        clearInterval(interval)
+        return resolve()
+      }
+    }, 250)
   })
   // Registers shortcut
 }
@@ -86,35 +96,63 @@ function delay (timeout) {
   })
 }
 
+// // // //
+
+function executeWorkflow ({ workflow, trigger }) {
+  // NOTE - each step is asynchonous - this should be considered for things like delays
+  return Promise.each(workflow.steps, (step) => {
+    if (step.type === 'TEXT') {
+      return typeString(step.value)
+    } else if (step.type === 'DELAY') {
+      return delay(step.value)
+    } else if (step.type === 'KEY') {
+      return keyTap(step.value)
+    } else if (step.type === 'KEY_UP') {
+      return keyUp(trigger.shortcut)
+    }
+  }).then(() => {
+    // console.log('WORKFLOW COMPLETE')
+  })
+}
+
+// // // //
+
 // Setup keybindings
 _.each(myWorkflows, (workflow) => {
   _.each(workflow.triggers, (trigger) => {
     if (trigger.type === DESKTOP_SHORTCUT) {
 
+      // TODO - break everything below out into a separate function
+
       // Registers shortcut
       ioHook.registerShortcut(trigger.shortcut, (keys) => {
+
+        // Short-circuit execution if a workflow is currently in-progress
+        // TODO - should this be tied to a specific workflow, or should it short-circuit all?
+        if (CURRENTLY_EXECUTING) return
+        CURRENTLY_EXECUTING = true
+        IS_KEY_UP = false
+
         console.log('Shortcut pressed with keys:', keys);
         // console.log('EXECUTING WORKFLOW')
 
+        // Handle KEYUP event
+        // TODO - clean up this handler when the function is complete?
+        ioHook.on('keyup', (msg) => {
+          if (msg.keycode === F7) {
+            if (IS_KEY_UP) return
+            IS_KEY_UP = true
+          }
+        });
 
+        // // // //
         // Execute workflow
-        setTimeout(() => {
-
-          // NOTE - each step is asynchonous - this should be considered for things like delays
-          Promise.each(workflow.steps, (step) => {
-            if (step.type === 'TEXT') {
-              return typeString(step.value)
-            } else if (step.type === 'DELAY') {
-              return delay(step.value)
-            } else if (step.type === 'KEY') {
-              return keyTap(step.value)
-            } else if (step.type === 'KEY_UP') {
-              return keyUp(trigger.shortcut)
-            }
-          }).then(() => {
-            // console.log('WORKFLOW COMPLETE')
-          })
-        }, EXECUTION_TIMEOUT)
+        executeWorkflow({ workflow, trigger })
+        .then(( ) => {
+          console.log('\n\nDONE EXECUTING\n\n')
+          CURRENTLY_EXECUTING = false
+        })
+        // // // //
 
       });
 
