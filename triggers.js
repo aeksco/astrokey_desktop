@@ -7,8 +7,9 @@ const F7 = 65;
 module.exports = [
   {
     // shortcut: [CTRL, F7]
+    // workflow_id: 'abc123'
     shortcut: [F7],
-    workflow_id: 'abc123'
+    workflow_id: 'xyzabc'
   },
   {
     // shortcut: [CTRL, F7]

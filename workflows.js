@@ -24,4 +24,45 @@ module.exports = [
       { id: 2, order: 2, type: 'KEY', value: 'enter' }
     ]
   },
+  {
+    _id: 'xyzabc',
+    label: 'My Third Workflow',
+    author: 'aeksco',
+    steps: [
+      {
+        id: 1,
+        order: 1,
+        type: 'MACRO',
+        value: [
+          { order: 1, key: 'control', position: 'KEY_DOWN' },
+          { order: 2, key: 'space', position: 'KEY_PRESS' },
+          { order: 3, key: 'control', position: 'KEY_UP' }
+        ]
+      },
+      {
+        id: 2,
+        order: 2,
+        type: 'DELAY',
+        value: 1000
+      },
+      {
+        id: 3,
+        order: 3,
+        type: 'TEXT',
+        value: 'CHROME'
+      },
+      {
+        id: 4,
+        order: 4,
+        type: 'DELAY',
+        value: 1000
+      },
+      {
+        id: 5,
+        order: 5,
+        type: 'KEY',
+        value: 'enter'
+      }
+    ]
+  },
 ]

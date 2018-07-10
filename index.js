@@ -69,6 +69,26 @@ function delay (timeout) {
   })
 }
 
+function runMacro (macro) {
+  // console.log('Start delay...')
+  return new Promise((resolve, reject) => {
+    _.each(macro, (step) => {
+      console.log(step)
+      if (step.position === 'KEY_DOWN') {
+        robot.keyToggle(step.key, 'down')
+      } else if (step.position === 'KEY_UP') {
+        robot.keyToggle(step.key, 'up')
+      } else {
+        robot.keyTap(step.key)
+      }
+    })
+    return resolve()
+    // setTimeout(() => {
+    //   // console.log('Delay finished.')
+    // }, timeout)
+  })
+}
+
 // // // //
 
 function executeWorkflow ({ workflow, trigger }) {
@@ -82,9 +102,9 @@ function executeWorkflow ({ workflow, trigger }) {
       return keyTap(step.value)
     } else if (step.type === 'KEY_UP') {
       return keyUp(trigger.shortcut)
+    } else if (step.type === 'MACRO') {
+      return runMacro(step.value)
     }
-  }).then(() => {
-    // console.log('WORKFLOW COMPLETE')
   })
 }
 
