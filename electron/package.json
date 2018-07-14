@@ -1,0 +1,22 @@
+{
+  "name": "astrokey_desktop",
+  "version": "1.0.0",
+  "description": "AstroKey Desktop application in Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/astrokey/astrokey_desktop",
+  "keywords": [
+    "Electron",
+    "AstroKey"
+  ],
+  "devDependencies": {
+    "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.10",
+    "robotjs": "^0.5.1"
+  }
+}
