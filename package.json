@@ -13,5 +13,8 @@
     "iohook": "^0.2.0",
     "lodash": "^4.17.10",
     "robotjs": "^0.5.1"
+  },
+  "devDependencies": {
+    "electron": "^2.0.5"
   }
 }

@@ -9,11 +9,15 @@ module.exports = [
     // shortcut: [CTRL, F7]
     // workflow_id: 'abc123'
     shortcut: [F7],
-    workflow_id: 'xyzabc'
+    workflow_id: 'xyzabc',
+    global_hotkey: 'Ctrl+Shift+A',
+    accelerator: 'CommandOrControl+Shift+A'
   },
   {
     // shortcut: [CTRL, F7]
     shortcut: [ALT],
-    workflow_id: 'xyz123'
+    workflow_id: 'xyz123',
+    global_hotkey: 'ctrl+tab',
+    accelerator: 'CommandOrControl+Tab'
   },
 ]

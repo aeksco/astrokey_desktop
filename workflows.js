@@ -30,6 +30,12 @@ module.exports = [
     author: 'aeksco',
     steps: [
       {
+        id: 0,
+        order: 0,
+        type: 'DELAY',
+        value: 1000
+      },
+      {
         id: 1,
         order: 1,
         type: 'MACRO',
@@ -55,7 +61,7 @@ module.exports = [
         id: 4,
         order: 4,
         type: 'DELAY',
-        value: 1000
+        value: 500
       },
       {
         id: 5,
