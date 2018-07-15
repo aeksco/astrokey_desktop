@@ -16,6 +16,13 @@ const triggers = require('../triggers');
 let mainWindow
 
 function createWindow () {
+
+  // Only allow one open window at a time
+  if (mainWindow) {
+    mainWindow.focus()
+    return
+  }
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
