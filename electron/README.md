@@ -43,3 +43,11 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 ## License
 
 [CC0 1.0 (Public Domain)](LICENSE.md)
+
+## Notes
+
+https://github.com/electron/electron/blob/master/docs/api/frameless-window.md
+https://electronjs.org/docs/api/accelerator
+https://electronjs.org/docs/api/global-shortcut
+https://github.com/octalmage/robotjs/wiki/Electron
+https://github.com/nwjs/nw.js/wiki/shortcut

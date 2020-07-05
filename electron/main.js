@@ -258,10 +258,36 @@ let tray = null
 app.on('ready', () => {
   tray = new Tray('./astrokey_white.png')
   const contextMenu = Menu.buildFromTemplate([
+    {label: 'AstroKey'},
     {label: 'Item1', type: 'radio'},
     {label: 'Item2', type: 'radio'},
     {label: 'Item3', type: 'radio', checked: true},
-    {label: 'Item4', type: 'radio'}
+    {label: 'Item4', type: 'radio'},
+    {label: 'Disable Hotkeys', type: 'checkbox'},
+    {
+      label: 'Edit',
+      submenu: [
+        {role: 'undo'},
+        {role: 'redo'},
+        {type: 'separator'},
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
+        {role: 'pasteandmatchstyle'},
+        {role: 'delete'},
+        {role: 'selectall'}
+      ]
+    },
+    {
+      role: 'help',
+      submenu: [
+        {
+          label: 'Learn More',
+          click () { require('electron').shell.openExternal('https://electronjs.org') }
+        }
+      ]
+    },
+    {label: 'Quit', type: 'radio', click () { app.quit() }},
   ])
   tray.setToolTip('AstroKey Desktop')
   tray.setContextMenu(contextMenu)
